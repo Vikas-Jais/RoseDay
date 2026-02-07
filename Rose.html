@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Rose Day Ritu 🌹</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Segoe UI', sans-serif;
+    background-image: url("RoseBackground.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Soft overlay */
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 190, 210, 0.35);
+    z-index: -1;
+}
+
+/* Ritu name */
+.name {
+    position: absolute;
+    top: 5%;
+    width: 100%;
+    text-align: center;
+    font-size: 3.2rem;
+    color: white;
+    font-family: 'Brush Script MT', cursive;
+    text-shadow: 0 0 15px #fff, 0 0 30px #ff1744;
+}
+
+/* Intro text */
+.intro {
+    position: absolute;
+    top: 16%;
+    width: 100%;
+    text-align: center;
+    font-size: 1.3rem;
+    color: white;
+    font-family: 'Brush Script MT', cursive;
+    text-shadow: 0 0 10px #ff1744;
+    animation: blink 1.8s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.5; }
+}
+
+/* Photo */
+.photo-frame {
+    position: absolute;
+    top: 26%;
+    width: 100%;
+    text-align: center;
+    display: none;
+}
+
+.photo-frame img {
+    width: 260px;
+    height: 260px;
+    object-fit: cover;
+    border-radius: 24px;
+    border: 4px solid rgba(255,255,255,0.9);
+    box-shadow: 0 0 35px rgba(255,105,135,0.9);
+    animation: photoPop 0.8s ease;
+}
+
+@keyframes photoPop {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Floating roses */
+.rose {
+    position: absolute;
+    font-size: 2.4rem;
+    cursor: pointer;
+    animation: float 10s linear infinite;
+}
+
+@keyframes float {
+    from { transform: translateY(100vh); opacity: 0; }
+    to { transform: translateY(-10vh) rotate(360deg); opacity: 1; }
+}
+
+/* Floating hearts */
+.heart {
+    position: absolute;
+    color: #ff1744;
+    font-size: 1.4rem;
+    animation: heartFloat 8s linear infinite;
+    opacity: 0.85;
+}
+
+@keyframes heartFloat {
+    from { transform: translateY(100vh); opacity: 0; }
+    to { transform: translateY(-10vh); opacity: 1; }
+}
+
+/* Message card */
+.message-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255,255,255,0.96);
+    padding: 30px;
+    border-radius: 25px;
+    width: 85%;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    display: none;
+    z-index: 5;
+}
+
+.message-box h1 {
+    font-family: 'Brush Script MT', cursive;
+    color: #e91e63;
+    font-size: 2.4rem;
+}
+
+.message-box p {
+    font-family: 'Brush Script MT', cursive;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #444;
+    min-height: 150px;
+    line-height: 1.6;
+}
+
+/* Close button */
+.close-btn {
+    display: none;
+    margin-top: 20px;
+    background: #e91e63;
+    color: white;
+    border: none;
+    padding: 10px 26px;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* I Love You */
+.main-love {
+    position: absolute;
+    bottom: 14%;
+    width: 100%;
+    text-align: center;
+    font-size: 3.2rem;
+    font-family: 'Brush Script MT', cursive;
+    color: white;
+    text-shadow: 0 0 25px #ff1744;
+    display: none;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    50% { transform: scale(1.15); }
+}
+
+/* RITU hearts */
+.name-hearts {
+    position: absolute;
+    bottom: 7%;
+    width: 100%;
+    text-align: center;
+    font-size: 2rem;
+    display: none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="name">Ritu 💖</div>
+
+<div class="intro" id="introText">
+    Click On Any Rose To Reveal Something Babby 🌹🥰
+</div>
+
+<div class="photo-frame" id="photoFrame">
+    <img src="pic.jpg" alt="Us ❤️">
+</div>
+
+<div class="message-box" id="box">
+    <h1>Happy Rose Day Ritu 🌹</h1>
+    <p id="typeText"></p>
+    <button class="close-btn" id="closeBtn" onclick="closeBox()">Close</button>
+</div>
+
+<div class="main-love" id="mainLove">
+    I Love You Ritu ❤️
+</div>
+
+<div class="name-hearts" id="heartName">
+    ❤️ R ❤️ I ❤️ T ❤️ U ❤️
+</div>
+
+<!-- 🎶 OFFLINE MUSIC -->
+<audio id="music" src="music.mp3" loop></audio>
+
+<script>
+const messageLines = [
+    "Socha Tho Tha Meri Jaan Ko Ek Gulab Du.",
+    "Phir Yaad Aaya.",
+    "Aap Hi Tho Gulab Ho 🌹🥰"
+];
+
+let lineIndex = 0;
+let charIndex = 0;
+
+const box = document.getElementById("box");
+const textEl = document.getElementById("typeText");
+const closeBtn = document.getElementById("closeBtn");
+const mainLove = document.getElementById("mainLove");
+const heartName = document.getElementById("heartName");
+const photoFrame = document.getElementById("photoFrame");
+const introText = document.getElementById("introText");
+const music = document.getElementById("music");
+
+function typeWriter() {
+    if (lineIndex < messageLines.length) {
+        if (charIndex < messageLines[lineIndex].length) {
+            textEl.innerHTML += messageLines[lineIndex].charAt(charIndex);
+            charIndex++;
+            setTimeout(typeWriter, 55);
+        } else {
+            textEl.innerHTML += "<br>";
+            lineIndex++;
+            charIndex = 0;
+            setTimeout(typeWriter, 400);
+        }
+    } else {
+        closeBtn.style.display = "inline-block";
+    }
+}
+
+function showMessage() {
+    introText.style.display = "none";
+    box.style.display = "block";
+    textEl.innerHTML = "";
+    closeBtn.style.display = "none";
+    lineIndex = 0;
+    charIndex = 0;
+
+    music.volume = 0.7;
+    music.play();   // ▶ plays because user clicked a rose
+
+    typeWriter();
+}
+
+function closeBox() {
+    box.style.display = "none";
+    photoFrame.style.display = "block";
+    mainLove.style.display = "block";
+    heartName.style.display = "block";
+}
+
+/* Roses */
+function createRose() {
+    const r = document.createElement("div");
+    r.className = "rose";
+    r.innerText = "🌹";
+    r.style.left = Math.random() * 100 + "vw";
+    r.onclick = showMessage;
+    document.body.appendChild(r);
+    setTimeout(() => r.remove(), 10000);
+}
+
+/* Hearts */
+function createHeart() {
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerText = "❤";
+    h.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(h);
+    setTimeout(() => h.remove(), 8000);
+}
+
+setInterval(createRose, 800);
+setInterval(createHeart, 400);
+</script>
+
+</body>
+</html>
